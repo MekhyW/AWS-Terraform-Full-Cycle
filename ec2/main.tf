@@ -16,7 +16,6 @@ resource aws_autoscaling_group "apps" {
   max_size = 3
   desired_capacity = 2
   vpc_zone_identifier = var.subnet_lb_ids
-
   enabled_metrics = [
    "GroupTotalInstances",
    "GroupInServiceInstances",
@@ -35,9 +34,8 @@ resource aws_autoscaling_group "apps" {
 }
 
 
-resource "aws_iam_role" "ec2_role" {
-  name = "ec2_role"
-
+resource "aws_iam_role" "ec2_iam_role" {
+  name = "ec2_iam_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -53,9 +51,7 @@ resource "aws_iam_role" "ec2_role" {
 }
 
 resource "aws_iam_policy" "ec2_policy" {
-  name        = "ec2-cloudwatch-policy"
-  description = "A policy that allows EC2 instances to log to CloudWatch, access RDS information, and retrieve secrets."
-
+  name        = "policy-cloudwatch-rds-secretsmanager"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -93,11 +89,11 @@ resource "aws_iam_policy" "ec2_policy" {
 
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "ec2_profile"
-  role = aws_iam_role.ec2_role.name
+  role = aws_iam_role.ec2_iam_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_policy_attachment" {
-  role       = aws_iam_role.ec2_role.name
+  role       = aws_iam_role.ec2_iam_role.name
   policy_arn = aws_iam_policy.ec2_policy.arn
 }
 
@@ -152,15 +148,15 @@ resource "aws_cloudwatch_metric_alarm" "lowCPU" {
 
 
 resource "aws_lb" "loadBalancer" {
-  name               = "lb"
+  name               = "loadBalancer"
   internal           = false
   load_balancer_type = "application"
   security_groups    = var.lb_security_group
   subnets            = var.subnet_lb_ids
 }
 
-resource "aws_lb_target_group" "target" {
-  name      = "target"
+resource "aws_lb_target_group" "lb_target" {
+  name      = "lb-target"
   port      = 80
   protocol  = "HTTP"
   vpc_id    = var.vpc_id
@@ -182,11 +178,11 @@ resource "aws_lb_listener" "listener" {
   protocol         = "HTTP"
   default_action {
     type            = "forward"
-    target_group_arn = aws_lb_target_group.target.arn
+    target_group_arn = aws_lb_target_group.lb_target.arn
   }
 }
 
 resource "aws_autoscaling_attachment" "asg_attach" {
   autoscaling_group_name = aws_autoscaling_group.apps.name
-  lb_target_group_arn  = aws_lb_target_group.target.arn
+  lb_target_group_arn  = aws_lb_target_group.lb_target.arn
 }
