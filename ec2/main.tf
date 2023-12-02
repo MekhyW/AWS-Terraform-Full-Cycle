@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "launch" {
   name = "apps"
-  image_id = "ami-03ae24afdb6541606" # Ubuntu 20.04 LTS on us-east-1
+  image_id = "ami-06aa3f7caf3a30282" # Canonical, Ubuntu, 20.04 LTS, amd64 focal image build on 2023-10-25
   instance_type = "t2.micro"
   user_data = templatefile("./ec2/config.sh", { rds_endpoint = var.rds_endpoint})
   security_groups = var.app_security_group
