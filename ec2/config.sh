@@ -7,7 +7,7 @@ sudo apt-get install git -y
 git clone https://github.com/MekhyW/Gym-CRUD.git
 cd Gym-CRUD
 touch .env
-echo "SERVER = localhost" >> .env
+echo "SERVER = ${rds_endpoint}" >> .env
 echo "USER = root" >> .env
 echo "PASSWORD = megadados" >> .env
 echo "DB = academia" >> .env
