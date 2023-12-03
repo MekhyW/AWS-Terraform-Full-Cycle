@@ -13,6 +13,6 @@ echo "SERVER = ${rds_endpoint}" >> .env
 echo "USERNAME = root" >> .env
 echo "PASSWORD = megadados" >> .env
 echo "DB = academia" >> .env
-pip install -r requirements.txt
+sudo pip install -U -r requirements.txt
 ip_address=$(hostname -I | awk '{print $1}')
-uvicorn main:app --host $ip_address --port 80
+sudo uvicorn main:app --host $ip_address --port 80
