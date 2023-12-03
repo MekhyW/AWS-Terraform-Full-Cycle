@@ -1,3 +1,15 @@
+variable "instance_image" {
+  description = "AMI for EC2 instance"
+  type = string
+  default = "ami-06aa3f7caf3a30282" # Canonical, Ubuntu, 20.04 LTS, amd64 focal image build on 2023-10-25
+}
+
+variable "instance_type" {
+  description = "Type of EC2 instance"
+  type = string
+  default = "t2.micro"
+}
+
 variable "vpc_cidr" {
     description = "CIDR block"
     type = string
