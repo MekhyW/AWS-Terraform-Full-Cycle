@@ -135,6 +135,8 @@ This suggests a monthly cost of approximately **$ 400.00** if such peaks were to
 
 - **Serverless**: The application could be deployed using serverless technologies such as AWS Lambda, which would reduce costs and improve scalability.
 
+- **Login system**: The application could be improved by adding a login system, which would allow the creation of multiple users with different permissions. AWS Congnito could be used for this purpose.
+
 - **HTTPS**: The application is currently not using HTTPS, which is a security risk. This could be easily fixed by using a load balancer with an SSL certificate.
 
 - **DDOS protection**: The application is not protected against DDOS attacks. This could be fixed with services such as AWS Shield, CloudFlare, fail2ban, etc.
